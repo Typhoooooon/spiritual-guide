@@ -1,0 +1,84 @@
+<h2>知识架构（修正版）</h2>
+<p class="subtitle">预设角色 + 后人解读 + 在线检索 + 自由输入自动研究</p>
+
+<div class="section">
+  <h3>整体数据流</h3>
+  <div style="background:var(--surface-1);border-radius:8px;padding:20px;margin-top:12px;font-size:13px;line-height:2.2">
+    <strong>预设角色（库内）</strong> → 本地配置文件 + LLM 知识<br>
+    <strong>自由输入（库外）</strong> → 在线搜索 → 提取资料 → 构建临时角色 → LLM 生成
+  </div>
+</div>
+
+<div class="section">
+  <h3>1. 预设角色升级：原文 + 后人解读</h3>
+  <div style="background:var(--surface-1);border-radius:8px;padding:16px 20px;margin-top:12px">
+    <p>每个预设思想家的配置文件扩展为两层知识：</p>
+    <table style="width:100%;border-collapse:collapse;margin-top:12px">
+      <tr style="background:var(--surface-2)">
+        <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">层级</th>
+        <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">内容</th>
+        <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">示例（老子）</th>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border:1px solid var(--border)"><strong>原始经典</strong></td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">人物原著的核心章节、名言、主题标签</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">"道可道非常道"、"上善若水"、"无为而无不为"</td>
+      </tr>
+      <tr style="background:var(--surface-1)">
+        <td style="padding:8px 12px;border:1px solid var(--border)"><strong>后人解读</strong></td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">现代学者/思想家的阐释和当代应用</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">陈鼓应《老子注译及评介》、安乐哲的过程哲学解读、韩林合的现代生存论解读</td>
+      </tr>
+    </table>
+    <p style="margin-top:12px;font-size:13px;color:var(--text-muted)">这样角色的回答不只是"老子说过什么"，还能吸收"当代人怎么理解老子"，让回复更丰富、更多层次。</p>
+  </div>
+</div>
+
+<div class="section">
+  <h3>2. 自由输入升级：自动在线研究</h3>
+  <div style="background:var(--surface-1);border-radius:8px;padding:16px 20px;margin-top:12px">
+    <p>用户输入不在库中的名字时，系统自动执行三步：</p>
+    <div style="padding:16px;line-height:2.2;font-size:13px">
+      <strong>Step 1 — 在线搜索</strong><br>
+      <span style="color:var(--text-muted)">搜索 "[名字] 核心思想"、"[名字] 名言"、"[名字] 著作"，抓取 3-5 个来源的内容摘要</span><br><br>
+      <strong>Step 2 — 提取角色资料</strong><br>
+      <span style="color:var(--text-muted)">将搜索结果整理为：生卒年份、思想传统、代表著作、核心观点、语言风格、著名引文</span><br><br>
+      <strong>Step 3 — 构建临时 System Prompt + 原典引用</strong><br>
+      <span style="color:var(--text-muted)">将提取的资料拼入 System Prompt 和原典引用区，生成高质量角色回答</span>
+    </div>
+    <div style="background:#fef9e7;border-radius:8px;padding:12px 16px;margin-top:12px;font-size:13px">
+      <strong>注意：</strong>在线检索仅在<strong>首次遇到该名字时</strong>执行。搜索结果缓存到本地，下次同一名字直接使用缓存。预设角色不需要在线搜索。
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>3. 两种路径对比</h3>
+  <table style="width:100%;border-collapse:collapse;margin-top:12px">
+    <tr style="background:var(--surface-2)">
+      <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)"></th>
+      <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">预设角色</th>
+      <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">自由输入</th>
+    </tr>
+    <tr>
+      <td style="padding:8px 12px;border:1px solid var(--border)">知识来源</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">手工整理的原典 + 后人解读</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">在线搜索 + LLM 知识</td>
+    </tr>
+    <tr style="background:var(--surface-1)">
+      <td style="padding:8px 12px;border:1px solid var(--border)">响应速度</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">即时（无网络 IO）</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">首次有 3-5 秒延迟，缓存后即时</td>
+    </tr>
+    <tr>
+      <td style="padding:8px 12px;border:1px solid var(--border)">质量</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">高（精细调校）</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">中高（取决于搜索质量）</td>
+    </tr>
+    <tr style="background:var(--surface-1)">
+      <td style="padding:8px 12px;border:1px solid var(--border)">角色数量</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">约 23 位</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">无限</td>
+    </tr>
+  </table>
+</div>

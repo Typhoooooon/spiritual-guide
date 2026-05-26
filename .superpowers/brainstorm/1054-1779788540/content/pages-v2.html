@@ -1,0 +1,67 @@
+<h2>页面结构（修正版 v2）</h2>
+<p class="subtitle">首页思想家选择改为自由输入 + 自动补全</p>
+
+<div class="section">
+  <h3>页面1：首页 — 修正后</h3>
+  <div style="background:var(--surface-1);border-radius:8px;padding:20px;margin-top:12px">
+    <div class="mockup">
+      <div class="mockup-header">首页布局</div>
+      <div class="mockup-body">
+        <div style="text-align:center;padding:40px 20px">
+          <h2 style="margin-bottom:8px">向智者提问</h2>
+          <p style="color:var(--text-muted);margin-bottom:24px">你的困惑，千年前的智者也曾思考过</p>
+          <textarea class="mock-input" style="width:80%;height:120px;display:block;margin:0 auto" placeholder="写下你的问题或困惑..."></textarea>
+          <div style="margin-top:16px;display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap">
+            <div style="position:relative">
+              <input class="mock-input" style="width:200px" placeholder="输入思想家姓名...（可选）" value="">
+              <div style="position:absolute;top:100%;left:0;right:0;background:white;border:1px solid #ddd;border-radius:0 0 6px 6px;display:none;text-align:left;font-size:13px;z-index:10">
+                <div style="padding:6px 10px;cursor:pointer">释迦牟尼 · 佛教</div>
+                <div style="padding:6px 10px;cursor:pointer;background:#f5f5f5">释广钦 · 禅宗</div>
+              </div>
+            </div>
+            <span style="font-size:13px;color:var(--text-muted)">留空则自动匹配三位不同传统的智者</span>
+            <select class="mock-input" style="width:140px"><option>温和模式</option><option>深度模式</option></select>
+            <button class="mock-button" style="padding:10px 32px">提问</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>思想家输入框行为</h3>
+  <div style="background:var(--surface-1);border-radius:8px;padding:16px 20px;margin-top:12px">
+    <ul style="line-height:2.2">
+      <li><strong>自由文本输入</strong> — 用户可以输入任意名字（孔子、王阳明、维特根斯坦...），不限预定义列表</li>
+      <li><strong>自动补全提示</strong> — 输入时显示匹配建议（从内置角色库中检索），用户可点选也可忽略</li>
+      <li><strong>无匹配时</strong> — 用户输入的名字不在内置库中 → 系统自动构建临时角色（姓名 + 传统由 LLM 自行理解），正常生成回答</li>
+      <li><strong>留空时</strong> — 系统从三种传统中各选一位，自动匹配</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <h3>内置角色库 + 自由扩展</h3>
+  <div style="background:var(--surface-1);border-radius:8px;padding:16px 20px;margin-top:12px">
+    <p>系统预设一批思想家配置文件（约 20-30 位），覆盖主要宗教/哲学/社会学传统。这些提供<strong>精细调校的口吻和 prompt</strong>。用户输入的名字若不在库中，LLM 根据自身知识构建临时人格——质量略低于预设角色，但保证了<strong>无限扩展性</strong>。</p>
+    <table style="width:100%;border-collapse:collapse;margin-top:12px">
+      <tr style="background:var(--surface-1)">
+        <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">内置（预设角色）</th>
+        <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">自由输入（临时角色）</th>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border:1px solid var(--border)">精细 System Prompt</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">LLM 根据姓名自动推断</td>
+      </tr>
+      <tr style="background:var(--surface-1)">
+        <td style="padding:8px 12px;border:1px solid var(--border)">预定义典籍、口吻、深度变体</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">通用口吻，适配质量略低</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border:1px solid var(--border)">头像 + 传统标签</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">自动生成首字母头像</td>
+      </tr>
+    </table>
+  </div>
+</div>

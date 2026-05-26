@@ -1,0 +1,75 @@
+<h2>对话系统设计（修正版）</h2>
+<p class="subtitle">首轮三视角展示 → 用户选择一位 → 深入对话</p>
+
+<div class="section">
+  <h3>完整对话流程</h3>
+  <div style="background:var(--surface-1);border-radius:8px;padding:20px;margin-top:12px;font-family:monospace;font-size:13px;line-height:2.2">
+    <strong>第0步</strong> → 用户输入问题，选择深度（温和/深度），可选指定思想家<br>
+    <strong>第1步</strong> → 系统并行生成<strong>3位思想家</strong>的回答（每条约200-300字，较短的完整三段式）<br>
+    <strong>第2步</strong> → 三条回答并排展示，用户阅读后<strong>选择一位</strong>继续对话<br>
+    <strong>第3步</strong> → 进入一对一多轮对话（剩余14轮），被放弃的两个回答折叠收起<br>
+    <strong>第4步</strong> → 15轮总上限（首轮3答算1轮），达到后对话结束、只读
+  </div>
+</div>
+
+<div class="section">
+  <h3>首轮三答的生成逻辑</h3>
+  <div style="background:var(--surface-1);border-radius:8px;padding:16px 20px;margin-top:12px">
+    <ul style="line-height:2.2">
+      <li><strong>用户指定了思想家时</strong> — 该思想家的回答排在首位，另两位由系统从不同传统中选取（确保视角多样）</li>
+      <li><strong>用户未指定时</strong> — 系统从不同传统中各选一位（如：一位宗教人物 + 一位哲学家 + 一位社会学家）</li>
+      <li><strong>三条回答并行生成</strong> — 3个独立的 LLM 调用，彼此不可见对方内容，避免趋同</li>
+      <li><strong>首轮回答格式</strong> — 精简版三段式，200-300字。顶部显示思想家姓名 + 头像 + 所属传统</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <h3>首轮展示布局</h3>
+  <div style="background:var(--surface-1);border-radius:8px;padding:20px;margin-top:12px">
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px;background:white;border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center">
+        <div style="width:48px;height:48px;border-radius:50%;background:#e8f5e9;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:20px">☸</div>
+        <strong>释迦牟尼</strong>
+        <p style="font-size:12px;color:var(--text-muted)">佛教</p>
+        <p style="font-size:13px;text-align:left;line-height:1.7">"我明白你在痛苦中挣扎。这种感受并不陌生——它正是'苦谛'所指向的……"</p>
+        <button class="mock-button">与此人深入对话 →</button>
+      </div>
+      <div style="flex:1;min-width:200px;background:white;border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center">
+        <div style="width:48px;height:48px;border-radius:50%;background:#fce4ec;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:20px">📖</div>
+        <strong>尼采</strong>
+        <p style="font-size:12px;color:var(--text-muted)">存在主义哲学</p>
+        <p style="font-size:13px;text-align:left;line-height:1.7">"痛苦？很好。痛苦意味着你还活着，还没有被磨平成一张白纸……"</p>
+        <button class="mock-button">与此人深入对话 →</button>
+      </div>
+      <div style="flex:1;min-width:200px;background:white;border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center">
+        <div style="width:48px;height:48px;border-radius:50%;background:#e3f2fd;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:20px">🏛</div>
+        <strong>马克思</strong>
+        <p style="font-size:12px;color:var(--text-muted)">社会学/政治经济学</p>
+        <p style="font-size:13px;text-align:left;line-height:1.7">"你的痛苦不是私人问题。当劳动沦为商品，人便被'异化'……"</p>
+        <button class="mock-button">与此人深入对话 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>轮次计数</h3>
+  <table style="width:100%;border-collapse:collapse;margin-top:12px">
+    <tr style="background:var(--surface-1)">
+      <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">阶段</th>
+      <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">消耗轮次</th>
+      <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">剩余</th>
+    </tr>
+    <tr>
+      <td style="padding:8px 12px;border:1px solid var(--border)">首轮三答展示</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">1轮</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">14轮</td>
+    </tr>
+    <tr style="background:var(--surface-1)">
+      <td style="padding:8px 12px;border:1px solid var(--border)">一对一深入对话</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">最多14轮</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">每答递减</td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,70 @@
+<h2>技术栈 & 部署</h2>
+<p class="subtitle">最终确认项</p>
+
+<div class="section">
+  <h3>技术栈</h3>
+  <table style="width:100%;border-collapse:collapse;margin-top:12px">
+    <tr style="background:var(--surface-2)">
+      <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">层级</th>
+      <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">选型</th>
+      <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">理由</th>
+    </tr>
+    <tr>
+      <td style="padding:8px 12px;border:1px solid var(--border)">框架</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)"><strong>Next.js 14</strong> (App Router)</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">全栈一体，前端 + API 在一个项目里</td>
+    </tr>
+    <tr style="background:var(--surface-1)">
+      <td style="padding:8px 12px;border:1px solid var(--border)">数据库</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)"><strong>SQLite</strong> (Prisma ORM)</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">零配置，适合小项目，足够用</td>
+    </tr>
+    <tr>
+      <td style="padding:8px 12px;border:1px solid var(--border)">认证</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)"><strong>NextAuth.js</strong></td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">支持邮箱/GitHub登录，开箱即用</td>
+    </tr>
+    <tr style="background:var(--surface-1)">
+      <td style="padding:8px 12px;border:1px solid var(--border)">LLM</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)"><strong>OpenAI API</strong> (可替换)</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">GPT-4o 或 Claude API 均可</td>
+    </tr>
+    <tr>
+      <td style="padding:8px 12px;border:1px solid var(--border)">搜索</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)"><strong>SerpAPI / Bing API</strong></td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">用于自由输入时的在线检索</td>
+    </tr>
+    <tr style="background:var(--surface-1)">
+      <td style="padding:8px 12px;border:1px solid var(--border)">样式</td>
+      <td style="padding:8px 12px;border:1px solid var(--border)"><strong>Tailwind CSS</strong></td>
+      <td style="padding:8px 12px;border:1px solid var(--border)">快速实现设计，与 Next.js 深度集成</td>
+    </tr>
+  </table>
+</div>
+
+<div class="section">
+  <h3>部署</h3>
+  <div style="background:var(--surface-1);border-radius:8px;padding:16px 20px;margin-top:12px;line-height:2">
+    <p>推荐 <strong>Vercel</strong>（Next.js 官方平台，免费额度够个人项目用），或自部署到任意 VPS。</p>
+    <p>SQLite 文件放在项目目录，简单直接。后续用户多了可平滑迁移到 PostgreSQL。</p>
+  </div>
+</div>
+
+<div class="section">
+  <h3>API 端点</h3>
+  <div style="background:var(--surface-1);border-radius:8px;padding:16px 20px;margin-top:12px">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <tr style="background:var(--surface-2)">
+        <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">方法</th>
+        <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">端点</th>
+        <th style="text-align:left;padding:8px 12px;border:1px solid var(--border)">功能</th>
+      </tr>
+      <tr><td style="padding:8px 12px;border:1px solid var(--border)">POST</td><td style="padding:8px 12px;border:1px solid var(--border)"><code>/api/question</code></td><td style="padding:8px 12px;border:1px solid var(--border)">提交问题，返回三位思想家的首轮回答</td></tr>
+      <tr style="background:var(--surface-1)"><td style="padding:8px 12px;border:1px solid var(--border)">POST</td><td style="padding:8px 12px;border:1px solid var(--border)"><code>/api/chat</code></td><td style="padding:8px 12px;border:1px solid var(--border)">发送后续消息，继续一对一对话</td></tr>
+      <tr><td style="padding:8px 12px;border:1px solid var(--border)">GET</td><td style="padding:8px 12px;border:1px solid var(--border)"><code>/api/conversations</code></td><td style="padding:8px 12px;border:1px solid var(--border)">获取用户的历史对话列表</td></tr>
+      <tr style="background:var(--surface-1)"><td style="padding:8px 12px;border:1px solid var(--border)">GET</td><td style="padding:8px 12px;border:1px solid var(--border)"><code>/api/conversations/[id]</code></td><td style="padding:8px 12px;border:1px solid var(--border)">获取单条对话完整记录</td></tr>
+      <tr><td style="padding:8px 12px;border:1px solid var(--border)">POST</td><td style="padding:8px 12px;border:1px solid var(--border)"><code>/api/share</code></td><td style="padding:8px 12px;border:1px solid var(--border)">生成对话分享链接</td></tr>
+      <tr style="background:var(--surface-1)"><td style="padding:8px 12px;border:1px solid var(--border)">GET</td><td style="padding:8px 12px;border:1px solid var(--border)"><code>/api/thinkers</code></td><td style="padding:8px 12px;border:1px solid var(--border)">获取思想家列表（自动补全用）</td></tr>
+    </table>
+  </div>
+</div>

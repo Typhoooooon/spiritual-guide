@@ -1,0 +1,40 @@
+<h2>三种技术架构方案</h2>
+<p class="subtitle">宗教典籍问答 + 人物口吻回复 + 心理按摩。请选择你倾向的方案</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>极简单页 — 纯聊天窗口</h3>
+      <p>Next.js 单页应用，一个聊天界面 + 思想家选择器 + LLM API。无用户系统、无历史记录、无分享。最快上线，功能最纯粹。</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>1-2天可完成</li><li>代码量极少，维护简单</li><li>专注核心体验</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>无对话历史</li><li>无法分享</li><li>后续扩展需重构</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>轻量全栈 — 推荐方案</h3>
+      <p>Next.js 全栈（前端+API），SQLite 存储对话历史和用户。支持注册登录、对话记录、生成分享链接、深度调节。功能完整但不臃肿。</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>对话历史持久化</li><li>分享链接功能</li><li>可渐进扩展</li><li>3-5天可完成</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>稍多代码量</li><li>需要数据库</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>静态前端 + 轻量 API</h3>
+      <p>纯 HTML/JS 前端部署到静态托管，独立的 Python/FastAPI 后端处理 LLM 调用。前后端分离，各自独立部署。</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>前后端独立扩展</li><li>Python 生态适合后续加文本检索</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>需要部署两个服务</li><li>CORS/鉴权额外配置</li><li>开发效率不如一体式</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
