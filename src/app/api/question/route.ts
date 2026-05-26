@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { setGuestCookie } from "@/lib/guest";
 import { db } from "@/lib/db";
-import { selectThreeThinkers } from "@/lib/thinkers";
-import { buildSystemPrompt, buildUserPrompt } from "@/lib/prompts";
+import { selectThreeThinkers, getThinkerByName } from "@/lib/thinkers";
+import { buildSystemPrompt, buildUserPrompt, buildTempThinkerPrompt } from "@/lib/prompts";
 import { parallelChat } from "@/lib/llm";
-import { DepthMode } from "@/data/thinkers";
+import { DepthMode, ThinkerConfig } from "@/data/thinkers";
 
 export async function POST(request: NextRequest) {
   const userId = await setGuestCookie();
@@ -19,11 +19,43 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Question must be under 500 characters" }, { status: 400 });
   }
 
-  const selectedThinkers = selectThreeThinkers(thinkerName || undefined);
+  let selectedThinkers: ThinkerConfig[];
+  let hasCustomThinker = false;
+  let customThinker: ThinkerConfig | null = null;
+
+  if (thinkerName) {
+    const preset = getThinkerByName(thinkerName);
+    if (preset) {
+      selectedThinkers = selectThreeThinkers(thinkerName);
+    } else {
+      customThinker = {
+        id: `custom-${Date.now()}`,
+        name: thinkerName,
+        tradition: "",
+        era: "",
+        voice: "",
+        primarySources: [],
+        secondarySources: [],
+        systemPrompt: "",
+        tags: [],
+        avatar: "💭",
+      };
+      hasCustomThinker = true;
+      const others = selectThreeThinkers();
+      selectedThinkers = [customThinker, ...others.filter((t) => t.name !== thinkerName)].slice(0, 3);
+    }
+  } else {
+    selectedThinkers = selectThreeThinkers();
+  }
 
   const messageSets = await Promise.all(
     selectedThinkers.map(async (thinker) => {
-      const systemPrompt = buildSystemPrompt(thinker, depth);
+      let systemPrompt: string;
+      if (hasCustomThinker && thinker.id === customThinker!.id) {
+        systemPrompt = buildTempThinkerPrompt(thinker.name, "", depth);
+      } else {
+        systemPrompt = buildSystemPrompt(thinker, depth);
+      }
       const userPrompt = buildUserPrompt(question.trim(), true);
       return [
         { role: "system" as const, content: systemPrompt },
