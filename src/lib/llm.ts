@@ -1,9 +1,11 @@
 import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: process.env.DEEPSEEK_API_KEY,
-  baseURL: process.env.DEEPSEEK_BASE_URL || "https://api.deepseek.com",
-});
+function getClient() {
+  return new OpenAI({
+    apiKey: process.env.DEEPSEEK_API_KEY,
+    baseURL: process.env.DEEPSEEK_BASE_URL || "https://api.deepseek.com",
+  });
+}
 
 interface ChatMessage {
   role: "system" | "user" | "assistant";
@@ -11,7 +13,7 @@ interface ChatMessage {
 }
 
 export async function chat(messages: ChatMessage[]): Promise<string> {
-  const response = await client.chat.completions.create({
+  const response = await getClient().chat.completions.create({
     model: "deepseek-chat",
     messages,
     temperature: 0.8,
