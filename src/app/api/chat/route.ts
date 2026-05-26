@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getGuestId } from "@/lib/guest";
 import { db } from "@/lib/db";
 import { getThinkerByName } from "@/lib/thinkers";
 import { buildSystemPrompt, buildUserPrompt } from "@/lib/prompts";
@@ -9,10 +9,7 @@ import { DepthMode } from "@/data/thinkers";
 const MAX_ROUNDS = 15;
 
 export async function POST(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const userId = await getGuestId();
 
   const body = await request.json();
   const { conversationId, thinkerName, message } = body;
@@ -38,7 +35,7 @@ export async function POST(request: NextRequest) {
   if (!conversation) {
     return NextResponse.json({ error: "Conversation not found" }, { status: 404 });
   }
-  if (conversation.userId !== session.user.id) {
+  if (conversation.userId !== userId) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
   if (conversation.status !== "active") {

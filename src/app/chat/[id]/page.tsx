@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+
 import Link from "next/link";
 import { ChatMessage } from "@/components/ChatMessage";
 import { ChatInput } from "@/components/ChatInput";
@@ -30,7 +30,6 @@ const MAX_ROUNDS = 15;
 
 export default function ChatPage() {
   const { id } = useParams<{ id: string }>();
-  const { data: session } = useSession();
   const router = useRouter();
   const [conv, setConv] = useState<ConvData | null>(null);
   const [thinkerName, setThinkerName] = useState("");
@@ -158,14 +157,6 @@ export default function ChatPage() {
       alert("分享失败");
     }
   };
-
-  if (!session) {
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">请先登录</p>
-      </main>
-    );
-  }
 
   if (!conv) {
     return (

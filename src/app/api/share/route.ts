@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getGuestId } from "@/lib/guest";
 import { db } from "@/lib/db";
 import { nanoid } from "nanoid";
 
 export async function POST(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const userId = await getGuestId();
 
   const { conversationId } = await request.json();
   if (!conversationId) {
@@ -21,7 +18,7 @@ export async function POST(request: NextRequest) {
   if (!conversation) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
-  if (conversation.userId !== session.user.id) {
+  if (conversation.userId !== userId) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 

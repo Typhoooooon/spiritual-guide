@@ -1,15 +1,12 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getGuestId } from "@/lib/guest";
 import { db } from "@/lib/db";
 
 export async function GET() {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const userId = await getGuestId();
 
   const conversations = await db.conversation.findMany({
-    where: { userId: session.user.id },
+    where: { userId },
     orderBy: { updatedAt: "desc" },
     select: {
       id: true,

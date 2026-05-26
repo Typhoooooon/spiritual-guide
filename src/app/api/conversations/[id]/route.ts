@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getGuestId } from "@/lib/guest";
 import { db } from "@/lib/db";
 
 export async function GET(
@@ -8,10 +8,7 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const userId = await getGuestId();
 
   const conversation = await db.conversation.findUnique({
     where: { id },
@@ -21,7 +18,7 @@ export async function GET(
   if (!conversation) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
-  if (conversation.userId !== session.user.id && !conversation.shareId) {
+  if (conversation.userId !== userId && !conversation.shareId) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
@@ -34,17 +31,14 @@ export async function PATCH(
 ) {
   const { id } = await params;
 
-  const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const userId = await getGuestId();
 
   const body = await request.json();
   const conversation = await db.conversation.findUnique({
     where: { id },
   });
 
-  if (!conversation || conversation.userId !== session.user.id) {
+  if (!conversation || conversation.userId !== userId) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 

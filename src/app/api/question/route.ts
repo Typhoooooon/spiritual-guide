@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { setGuestCookie } from "@/lib/guest";
 import { db } from "@/lib/db";
 import { selectThreeThinkers } from "@/lib/thinkers";
 import { buildSystemPrompt, buildUserPrompt } from "@/lib/prompts";
@@ -7,10 +7,7 @@ import { parallelChat } from "@/lib/llm";
 import { DepthMode } from "@/data/thinkers";
 
 export async function POST(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const userId = await setGuestCookie();
 
   const body = await request.json();
   const { question, depth = "gentle" as DepthMode, thinker: thinkerName } = body;
@@ -42,7 +39,7 @@ export async function POST(request: NextRequest) {
 
     const conversation = await db.conversation.create({
       data: {
-        userId: session.user.id,
+        userId,
         title,
         thinkerName: "",
         thinkerTradition: "",
