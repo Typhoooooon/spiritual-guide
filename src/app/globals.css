@@ -1,0 +1,8 @@
+@config "../../tailwind.config.ts";
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
