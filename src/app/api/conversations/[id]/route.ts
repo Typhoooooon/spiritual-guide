@@ -27,3 +27,34 @@ export async function GET(
 
   return NextResponse.json(conversation);
 }
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+
+  const session = await auth();
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await request.json();
+  const conversation = await db.conversation.findUnique({
+    where: { id },
+  });
+
+  if (!conversation || conversation.userId !== session.user.id) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  const updated = await db.conversation.update({
+    where: { id },
+    data: {
+      thinkerName: body.thinkerName || conversation.thinkerName,
+      thinkerTradition: body.thinkerTradition || conversation.thinkerTradition,
+    },
+  });
+
+  return NextResponse.json(updated);
+}
