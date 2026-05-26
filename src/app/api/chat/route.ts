@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getGuestId } from "@/lib/guest";
 import { db } from "@/lib/db";
 import { getThinkerByName } from "@/lib/thinkers";
-import { buildSystemPrompt, buildUserPrompt } from "@/lib/prompts";
+import { buildSystemPrompt, buildUserPrompt, buildTempThinkerPrompt } from "@/lib/prompts";
 import { chat } from "@/lib/llm";
-import { DepthMode } from "@/data/thinkers";
+import { DepthMode, ThinkerConfig } from "@/data/thinkers";
 
 const MAX_ROUNDS = 15;
 
@@ -50,8 +50,12 @@ export async function POST(request: NextRequest) {
   }
 
   const thinker = getThinkerByName(thinkerName);
-  if (!thinker) {
-    return NextResponse.json({ error: "Thinker not found" }, { status: 404 });
+  let systemPrompt: string;
+
+  if (thinker) {
+    systemPrompt = buildSystemPrompt(thinker, conversation.depthMode as DepthMode);
+  } else {
+    systemPrompt = buildTempThinkerPrompt(thinkerName, "", conversation.depthMode as DepthMode);
   }
 
   const newRound = conversation.currentRound + 1;
@@ -63,7 +67,6 @@ export async function POST(request: NextRequest) {
       content: m.content,
     }));
 
-  const systemPrompt = buildSystemPrompt(thinker, conversation.depthMode as DepthMode);
   const userPrompt = buildUserPrompt(message.trim(), false, history);
 
   try {
